@@ -179,7 +179,8 @@ function($scope,
     var refresherHeight = self.refresher.clientHeight || 60;
     scrollView.activatePullToRefresh(
       refresherHeight,
-      refresherMethods
+      refresherMethods,
+      refresherScope.showSpinner
     );
   };
 

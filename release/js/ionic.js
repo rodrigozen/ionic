@@ -5795,7 +5795,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
    * @param tailCallback {Function} Callback to execute just before the refresher returns to it's original state. This is for zooming out the refresher.
    * @param pullProgressCallback Callback to state the progress while pulling to refresh
    */
-  activatePullToRefresh: function(height, refresherMethods) {
+  activatePullToRefresh: function(height, refresherMethods, showSpinner) {
     var self = this;
 
     self.__refreshHeight = height;
@@ -5805,8 +5805,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
     self.__refreshShow = function() { ionic.requestAnimationFrame(refresherMethods.show); };
     self.__refreshHide = function() { ionic.requestAnimationFrame(refresherMethods.hide); };
     self.__refreshTail = function() { ionic.requestAnimationFrame(refresherMethods.tail); };
-    self.__refreshTailTime = 100;
+    self.__refreshTailTime = showSpinner ? 100 : 10;
     self.__minSpinTime = 600;
+    self.__showSpinner = showSpinner;
   },
 
 
@@ -5835,7 +5836,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     // delay to make sure the spinner has a chance to spin for a split second before it's dismissed
     var d = new Date();
     var delay = 0;
-    if (self.refreshStartTime + self.__minSpinTime > d.getTime()) {
+    if (self.__showSpinner && (self.refreshStartTime + self.__minSpinTime > d.getTime())) {
       delay = self.refreshStartTime + self.__minSpinTime - d.getTime();
     }
     setTimeout(function() {
